@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MoneyFlow">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<title>MoneyFlow</title>
+</head>
+<body>
+<div class="app">
+
+<main id="homeScreen" class="screen active">
+<header class="topbar"><div><div class="brand">MoneyFlow</div><div class="muted" id="monthLabel"></div></div><button class="avatar" onclick="navigate('account')">M</button></header>
+<section class="balance-card"><div class="balance-label">Saldo</div><div class="balance" id="balance">0,00 zł</div><div class="balance-grid"><div><span>Przychody</span><strong class="green" id="income">+0 zł</strong></div><div><span>Wydatki</span><strong class="red" id="expense">-0 zł</strong></div></div></section>
+<section class="section"><div class="section-title"><h2>Planowane w tym miesiącu</h2><button class="link" onclick="navigate('planned')">Wszystkie</button></div><div class="planned-summary"><div><span>Planowane</span><strong id="plannedTotal">0 zł</strong></div><div><span>Po opłatach</span><strong id="forecastBalance">0 zł</strong></div></div></section>
+<section class="section"><div class="section-title"><h2>Ostatnie 7 dni</h2><span>Wydatki</span></div><div class="chart-card"><div class="chart" id="chart"></div><div class="chart-labels" id="chartLabels"></div></div></section>
+<section class="section"><div class="section-title"><h2>Ostatnie transakcje</h2><button class="link" onclick="navigate('transactions')">Wszystkie</button></div><div id="recent"></div></section>
+</main>
+
+<main id="transactionsScreen" class="screen">
+<header class="screen-head"><div><h1>Transakcje</h1><span class="muted">Cała historia</span></div></header>
+<div class="search"><span>⌕</span><input id="search" type="search" placeholder="Szukaj..." oninput="renderTransactions()"></div>
+<div class="summary"><div><span>Przychody</span><strong class="green" id="ti">+0 zł</strong></div><div><span>Wydatki</span><strong class="red" id="te">-0 zł</strong></div></div><div id="transactions"></div>
+</main>
+
+<main id="plannedScreen" class="screen">
+<header class="screen-head"><div><h1>Planowane</h1><span class="muted">Rachunki, media i raty</span></div><button class="round" onclick="openPlanned()">+</button></header>
+<div class="planned-total-card"><span>Planowane płatności</span><strong id="plannedPageTotal">0 zł</strong><small id="plannedCount">0 zobowiązań</small></div>
+<div id="plannedList"></div>
+</main>
+
+<main id="budgetsScreen" class="screen">
+<header class="screen-head"><div><h1>Budżety</h1><span class="muted">Kontroluj limity</span></div><button class="round" onclick="openBudget()">+</button></header><div id="budgets"></div>
+</main>
+
+<main id="statsScreen" class="screen">
+<header class="screen-head"><div><h1>Statystyki</h1><span class="muted">Analiza wydatków</span></div></header>
+<div class="month-switch"><button onclick="changeStats(-1)">‹</button><strong id="statsMonth"></strong><button onclick="changeStats(1)">›</button></div>
+<section class="stats-card"><span>Wydatki w miesiącu</span><strong id="statsTotal">0 zł</strong><small id="statsCount">0 transakcji</small></section>
+<section class="highlight"><div>🔥</div><span>Największa kategoria<strong id="largest">Brak danych</strong></span></section>
+<section class="category-card"><h2>Według kategorii</h2><div class="donut-wrap"><div class="donut" id="donut"><div><strong id="donutValue">0 zł</strong><small>wydatki</small></div></div></div><div id="categoryList"></div></section>
+</main>
+
+<main id="accountScreen" class="screen">
+<header class="screen-head"><div><h1>Konto</h1><span class="muted">Bezpieczeństwo MoneyFlow</span></div></header>
+<section class="account-card"><div class="account-avatar" id="accountAvatar">M</div><h2 id="accountName">Moje konto</h2><p class="muted" id="accountEmail">Konto lokalne</p></section>
+<section class="settings-card">
+<button onclick="openAccountEditor()">👤 <span>Profil i konto</span><b>›</b></button>
+<button onclick="setupPin()">🔐 <span id="pinSettingText">Ustaw blokadę PIN</span><b>›</b></button>
+<button onclick="setupFaceID()">👁️ <span>Face ID / Passkey</span><b>›</b></button>
+<button onclick="lockApp()">🔒 <span>Zablokuj teraz</span><b>›</b></button>
+</section>
+<div class="notice">PIN działa lokalnie. Face ID w aplikacji webowej jest realizowane przez Passkey/WebAuthn i wymaga później backendu dla prawdziwego konta.</div>
+</main>
+
+<button class="fab" onclick="openTransaction()">+</button>
+<nav class="nav">
+<button data-screen="home" onclick="navigate('home')">⌂<small>Start</small></button>
+<button data-screen="transactions" onclick="navigate('transactions')">☷<small>Transakcje</small></button>
+<button data-screen="planned" onclick="navigate('planned')">📅<small>Planowane</small></button>
+<button data-screen="budgets" onclick="navigate('budgets')">◉<small>Budżety</small></button>
+<button data-screen="stats" onclick="navigate('stats')">▥<small>Statystyki</small></button>
+</nav>
+</div>
+
+<div class="modal" id="transactionModal"><div class="sheet">
+<div class="modal-head"><div><h2 id="txTitle">Nowa transakcja</h2><span class="muted">Dodaj operację</span></div><button onclick="closeModal('transactionModal')">×</button></div>
+<div class="type-switch"><button id="expenseBtn" onclick="setType('expense')">Wydatek</button><button id="incomeBtn" onclick="setType('income')">Przychód</button></div>
+<label>Kwota</label><div class="amount"><input id="amount" type="number" inputmode="decimal" placeholder="0"><span>zł</span></div>
+<label>Nazwa</label><input class="field" id="name" placeholder="np. Lidl">
+<label>Kategoria</label><div class="categories" id="categories"></div>
+<label>Data</label><input class="field" id="date" type="date">
+<label>Notatka</label><textarea class="field" id="note" placeholder="Opcjonalna notatka"></textarea>
+<button class="primary" onclick="saveTx()">Zapisz transakcję</button>
+</div></div>
+
+<div class="modal" id="plannedModal"><div class="sheet">
+<div class="modal-head"><div><h2 id="plannedTitle">Nowa płatność</h2><span class="muted">Rachunek, media lub rata</span></div><button onclick="closeModal('plannedModal')">×</button></div>
+<label>Nazwa</label><input class="field" id="pName" placeholder="np. Internet / Kredyt">
+<label>Typ</label><div class="categories compact" id="plannedTypes"></div>
+<label>Kwota</label><div class="amount"><input id="pAmount" type="number" inputmode="decimal" placeholder="100"><span>zł</span></div>
+<label>Termin następnej płatności</label><input class="field" id="pDate" type="date">
+<label>Częstotliwość</label><select class="field" id="pFreq"><option value="monthly">Co miesiąc</option><option value="weekly">Co tydzień</option><option value="2months">Co 2 miesiące</option><option value="yearly">Co rok</option><option value="once">Jednorazowo</option></select>
+<label>Przypomnienie</label><select class="field" id="pReminder"><option value="7">7 dni przed</option><option value="3">3 dni przed</option><option value="1" selected>1 dzień przed</option><option value="0">W dniu płatności</option></select>
+<div class="loan-fields"><label>Liczba wszystkich rat (opcjonalnie)</label><input class="field" id="pTotalInst" type="number" placeholder="np. 36"><label>Pozostało rat (opcjonalnie)</label><input class="field" id="pLeftInst" type="number" placeholder="np. 24"></div>
+<button class="primary" onclick="savePlanned()">Zapisz płatność</button>
+</div></div>
+
+<div class="modal" id="budgetModal"><div class="sheet">
+<div class="modal-head"><div><h2>Nowy budżet</h2><span class="muted">Miesięczny limit</span></div><button onclick="closeModal('budgetModal')">×</button></div>
+<label>Kategoria</label><div class="categories" id="budgetCategories"></div><label>Limit</label><div class="amount"><input id="budgetAmount" type="number" inputmode="decimal" placeholder="1000"><span>zł</span></div><button class="primary" onclick="saveBudget()">Ustaw budżet</button>
+</div></div>
+
+<div class="modal" id="accountModal"><div class="sheet">
+<div class="modal-head"><div><h2>Profil</h2><span class="muted">Dane na tym urządzeniu</span></div><button onclick="closeModal('accountModal')">×</button></div>
+<label>Nazwa</label><input class="field" id="profileName" placeholder="np. Sebastian"><label>E-mail</label><input class="field" id="profileEmail" type="email" placeholder="ty@example.com"><button class="primary" onclick="saveProfile()">Zapisz profil</button>
+</div></div>
+
+<div class="lock" id="lockScreen"><div class="lock-logo">M</div><h1>MoneyFlow</h1><p>Twoje finanse są zablokowane</p><div class="pin-dots" id="pinDots">○ ○ ○ ○ ○ ○</div><input id="pinInput" class="pin-input" inputmode="numeric" maxlength="6" type="password" placeholder="PIN" oninput="pinInputChanged()"><button class="primary lock-btn" onclick="unlockWithPin()">Odblokuj</button><button class="face-btn" onclick="authenticateFace()">◉ Odblokuj przez Face ID</button><button class="link lock-link" onclick="openAccountEditor()">Nie pamiętam PIN-u</button><small id="faceStatus"></small></div>
+<script src="script.js"></script>
+</body></html>
