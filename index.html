@@ -1,1 +1,650 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#080a0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MoneyFlow">
 
+  <title>MoneyFlow</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+  <!-- START -->
+  <main id="homeScreen" class="screen active">
+
+    <header class="topbar">
+      <div>
+        <div class="brand">MoneyFlow</div>
+        <div class="muted" id="currentMonthLabel"></div>
+      </div>
+
+      <div class="avatar">M</div>
+    </header>
+
+    <section class="balance-card">
+      <div class="balance-label">Saldo</div>
+
+      <div class="balance-value" id="balanceValue">
+        0,00 zł
+      </div>
+
+      <div class="balance-grid">
+
+        <div>
+          <span>Przychody</span>
+          <strong class="positive" id="incomeValue">
+            +0 zł
+          </strong>
+        </div>
+
+        <div>
+          <span>Wydatki</span>
+          <strong class="negative" id="expenseValue">
+            -0 zł
+          </strong>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section">
+
+      <div class="section-heading">
+        <h2>Ostatnie 7 dni</h2>
+        <span>Wydatki</span>
+      </div>
+
+      <div class="chart-card">
+
+        <div
+          class="home-chart"
+          id="homeChart"
+        ></div>
+
+        <div
+          class="chart-labels"
+          id="homeChartLabels"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <section class="section">
+
+      <div class="section-heading">
+
+        <h2>Ostatnie transakcje</h2>
+
+        <button
+          class="text-button"
+          onclick="navigate('transactions')"
+        >
+          Wszystkie
+        </button>
+
+      </div>
+
+      <div id="recentTransactions"></div>
+
+    </section>
+
+  </main>
+
+
+  <!-- TRANSAKCJE -->
+
+  <main
+    id="transactionsScreen"
+    class="screen"
+  >
+
+    <header class="screen-header">
+
+      <div>
+        <h1>Transakcje</h1>
+        <span class="muted">
+          Cała historia
+        </span>
+      </div>
+
+    </header>
+
+
+    <div class="search">
+
+      <span>⌕</span>
+
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Szukaj..."
+        oninput="renderTransactions()"
+      >
+
+    </div>
+
+
+    <div class="summary-row">
+
+      <div class="summary-box">
+
+        <span>Przychody</span>
+
+        <strong
+          class="positive"
+          id="transactionsIncome"
+        >
+          +0 zł
+        </strong>
+
+      </div>
+
+
+      <div class="summary-box">
+
+        <span>Wydatki</span>
+
+        <strong
+          class="negative"
+          id="transactionsExpense"
+        >
+          -0 zł
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div id="transactionList"></div>
+
+  </main>
+
+
+  <!-- BUDŻETY -->
+
+  <main
+    id="budgetsScreen"
+    class="screen"
+  >
+
+    <header class="screen-header">
+
+      <div>
+
+        <h1>Budżety</h1>
+
+        <span class="muted">
+          Kontroluj swoje limity
+        </span>
+
+      </div>
+
+      <button
+        class="round-button"
+        onclick="openBudgetModal()"
+      >
+        +
+      </button>
+
+    </header>
+
+
+    <div id="budgetList"></div>
+
+  </main>
+
+
+  <!-- STATYSTYKI -->
+
+  <main
+    id="statsScreen"
+    class="screen"
+  >
+
+    <header class="screen-header">
+
+      <div>
+
+        <h1>Statystyki</h1>
+
+        <span class="muted">
+          Analiza wydatków
+        </span>
+
+      </div>
+
+    </header>
+
+
+    <div class="month-switcher">
+
+      <button
+        onclick="changeStatsMonth(-1)"
+      >
+        ‹
+      </button>
+
+      <strong id="statsMonth"></strong>
+
+      <button
+        onclick="changeStatsMonth(1)"
+      >
+        ›
+      </button>
+
+    </div>
+
+
+    <section class="stats-total">
+
+      <span>
+        Wydatki w miesiącu
+      </span>
+
+      <strong id="statsTotal">
+        0 zł
+      </strong>
+
+      <small id="statsTransactionCount">
+        0 transakcji
+      </small>
+
+    </section>
+
+
+    <section class="highlight-card">
+
+      <div class="highlight-icon">
+        🔥
+      </div>
+
+      <div>
+
+        <span>
+          Największa kategoria
+        </span>
+
+        <strong id="largestCategory">
+          Brak danych
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <section class="category-card">
+
+      <h2>
+        Według kategorii
+      </h2>
+
+      <div class="donut-wrapper">
+
+        <div
+          class="donut"
+          id="donut"
+        >
+
+          <div class="donut-center">
+
+            <strong id="donutValue">
+              0 zł
+            </strong>
+
+            <span>
+              wydatki
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="categoryList"></div>
+
+    </section>
+
+  </main>
+
+
+  <!-- PRZYCISK + -->
+
+  <button
+    class="floating-add"
+    onclick="openTransactionModal()"
+  >
+    +
+  </button>
+
+
+  <!-- NAWIGACJA -->
+
+  <nav class="bottom-nav">
+
+    <button
+      class="nav-item active"
+      data-screen="home"
+      onclick="navigate('home')"
+    >
+      <span>⌂</span>
+      <small>Start</small>
+    </button>
+
+
+    <button
+      class="nav-item"
+      data-screen="transactions"
+      onclick="navigate('transactions')"
+    >
+      <span>☷</span>
+      <small>Transakcje</small>
+    </button>
+
+
+    <button
+      class="nav-item"
+      data-screen="budgets"
+      onclick="navigate('budgets')"
+    >
+      <span>◉</span>
+      <small>Budżety</small>
+    </button>
+
+
+    <button
+      class="nav-item"
+      data-screen="stats"
+      onclick="navigate('stats')"
+    >
+      <span>▥</span>
+      <small>Statystyki</small>
+    </button>
+
+  </nav>
+
+</div>
+
+
+<!-- MODAL TRANSAKCJI -->
+
+<div
+  class="modal"
+  id="transactionModal"
+>
+
+  <div class="modal-sheet">
+
+    <div class="modal-title-row">
+
+      <div>
+
+        <h2 id="transactionModalTitle">
+          Nowa transakcja
+        </h2>
+
+        <span class="muted">
+          Dodaj operację finansową
+        </span>
+
+      </div>
+
+      <button
+        class="close-button"
+        onclick="closeTransactionModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="type-switch">
+
+      <button
+        id="expenseTypeButton"
+        class="type-button selected-expense"
+        onclick="setTransactionType('expense')"
+      >
+        Wydatek
+      </button>
+
+
+      <button
+        id="incomeTypeButton"
+        class="type-button"
+        onclick="setTransactionType('income')"
+      >
+        Przychód
+      </button>
+
+    </div>
+
+
+    <label>Kwota</label>
+
+    <div class="amount-input">
+
+      <input
+        id="transactionAmount"
+        type="number"
+        inputmode="decimal"
+        placeholder="0"
+      >
+
+      <span>zł</span>
+
+    </div>
+
+
+    <label>Nazwa</label>
+
+    <input
+      id="transactionName"
+      class="field"
+      type="text"
+      placeholder="np. Lidl"
+    >
+
+
+    <label>Kategoria</label>
+
+    <div
+      class="category-grid"
+      id="categoryGrid"
+    ></div>
+
+
+    <label>Data</label>
+
+    <input
+      id="transactionDate"
+      class="field"
+      type="date"
+    >
+
+
+    <label>Notatka</label>
+
+    <textarea
+      id="transactionNote"
+      class="field textarea"
+      placeholder="Opcjonalna notatka..."
+    ></textarea>
+
+
+    <button
+      class="primary-button"
+      onclick="saveTransaction()"
+    >
+      Zapisz transakcję
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- MODAL BUDŻETU -->
+
+<div
+  class="modal"
+  id="budgetModal"
+>
+
+  <div class="modal-sheet">
+
+    <div class="modal-title-row">
+
+      <div>
+
+        <h2>Nowy budżet</h2>
+
+        <span class="muted">
+          Ustaw miesięczny limit
+        </span>
+
+      </div>
+
+      <button
+        class="close-button"
+        onclick="closeBudgetModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <label>Kategoria</label>
+
+    <div
+      class="category-grid"
+      id="budgetCategoryGrid"
+    ></div>
+
+
+    <label>Limit</label>
+
+    <div class="amount-input">
+
+      <input
+        id="budgetAmount"
+        type="number"
+        inputmode="decimal"
+        placeholder="1000"
+      >
+
+      <span>zł</span>
+
+    </div>
+
+
+    <button
+      class="primary-button"
+      onclick="saveBudget()"
+    >
+      Ustaw budżet
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- SZCZEGÓŁY TRANSAKCJI -->
+
+<div
+  class="modal"
+  id="detailsModal"
+>
+
+  <div class="modal-sheet">
+
+    <div class="modal-title-row">
+
+      <div>
+
+        <h2 id="detailsTitle">
+          Transakcja
+        </h2>
+
+        <span
+          class="muted"
+          id="detailsCategory"
+        ></span>
+
+      </div>
+
+      <button
+        class="close-button"
+        onclick="closeDetailsModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div
+      class="details-amount"
+      id="detailsAmount"
+    ></div>
+
+
+    <div class="details-row">
+
+      <span>Data</span>
+
+      <strong id="detailsDate"></strong>
+
+    </div>
+
+
+    <div class="details-row">
+
+      <span>Notatka</span>
+
+      <strong id="detailsNote"></strong>
+
+    </div>
+
+
+    <button
+      class="secondary-button"
+      onclick="editCurrentTransaction()"
+    >
+      ✏️ Edytuj
+    </button>
+
+
+    <button
+      class="danger-button"
+      onclick="deleteCurrentTransaction()"
+    >
+      Usuń transakcję
+    </button>
+
+  </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
