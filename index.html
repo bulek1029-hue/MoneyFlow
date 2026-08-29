@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#070a12">
+<link rel="manifest" href="manifest.webmanifest">
+<title>PC Game Web — iOS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <div class="eyebrow">WEB EMULATOR</div>
+      <h1>PC Game Web</h1>
+      <p>Gry PC w przeglądarce • iPhone / iPad</p>
+    </div>
+    <button id="fsBtn" class="iconBtn" aria-label="Pełny ekran">⛶</button>
+  </header>
+
+  <main>
+    <section class="card hero">
+      <div class="badge">BETA</div>
+      <h2>Uruchom własną grę</h2>
+      <p class="muted">Pliki gry pozostają na Twoim urządzeniu. Nie dodajemy żadnych gier do projektu.</p>
+      <label class="upload">
+        <input id="gameFile" type="file" accept=".zip,.exe,.com,.bat" multiple>
+        <span>📦 Wybierz pliki gry</span>
+      </label>
+      <div id="fileInfo" class="fileInfo">Nie wybrano plików</div>
+    </section>
+
+    <section class="screenWrap">
+      <canvas id="screen" width="960" height="540"></canvas>
+      <div id="screenMsg" class="screenMsg">
+        <strong>EKRAN EMULATORA</strong>
+        <span>Wybierz grę, aby rozpocząć.</span>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="stick" id="stick">
+        <div class="stickKnob"></div>
+      </div>
+      <div class="touchpad" id="touchpad"><span>TOUCHPAD / MYSZ</span></div>
+      <div class="buttons">
+        <button data-key="Escape">ESC</button>
+        <button data-key="Enter">↵</button>
+        <button data-key="Space">SPACJA</button>
+        <button data-key="Tab">TAB</button>
+        <button data-key="KeyE">E</button>
+        <button data-key="KeyF">F</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Tryby</h3>
+      <div class="modes">
+        <button class="mode active" data-mode="win32">Windows 32-bit</button>
+        <button class="mode" data-mode="dos">DOS</button>
+      </div>
+      <p id="modeText" class="muted">
+        Tryb Windows 32-bit jest eksperymentalny. KOTOR 2 jest grą Windows, nie DOS, więc kompatybilność zależy od silnika WASM.
+      </p>
+    </section>
+
+    <section class="card">
+      <h3>Stan projektu</h3>
+      <div class="status"><span class="dot"></span><span id="status">Gotowy</span></div>
+      <p class="muted small">Ten interfejs jest przygotowany pod podłączenie właściwego runtime'u emulatora. Nie zawiera plików chronionych prawem autorskim.</p>
+    </section>
+  </main>
+
+  <footer>PC Game Web • GitHub Pages • lokalne pliki użytkownika</footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
