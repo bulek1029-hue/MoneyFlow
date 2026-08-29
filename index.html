@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#070a12">
+<link rel="manifest" href="manifest.webmanifest">
+<title>PC Game Web</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+<header><div><small>PC GAME WEB</small><h1>Biblioteka gier</h1><p>Win32 • iPhone / iPad</p></div><button id="fs" type="button">⛶</button></header>
+
+<main>
+<section class="card hero">
+<h2>Dodaj własną grę</h2>
+<p>Wybierz ZIP z folderem gry. Plik pozostaje na Twoim urządzeniu. Następnie otworzymy właściwy runtime wemu.</p>
+<label class="drop"><input id="zip" type="file" accept=".zip"><span>📦 Wybierz ZIP gry</span></label>
+<div id="selected">Nie wybrano gry</div>
+<button id="start" class="primary" type="button" disabled>▶ Przygotuj do uruchomienia</button>
+</section>
+
+<section class="card">
+<h3>Biblioteka</h3>
+<div id="library" class="library"><div class="empty">Dodaj ZIP, aby pojawiła się tutaj gra.</div></div>
+</section>
+
+<section id="ready" class="card hidden">
+<h3>Gra gotowa</h3>
+<div id="gameName" class="gameName"></div>
+<p class="muted">Wemu działa lokalnie i pozwala wybrać program EXE z archiwum. Otwórz player, wybierz ten sam ZIP i wskaż plik EXE gry.</p>
+<div class="actions">
+<button id="openWemu" class="primary" type="button">🎮 Otwórz wemu</button>
+<button id="copyInfo" class="secondary" type="button">ℹ️ Instrukcja</button>
+</div>
+</section>
+
+<section class="card">
+<h3>Pad i ekran</h3>
+<div class="features"><span>🕹️ Analog</span><span>🖱️ Touchpad</span><span>🔘 Mapowanie</span><span>⛶ Fullscreen</span></div>
+<p class="muted small">Po uruchomieniu playera wemu korzystaj z naszej konfiguracji pada. Jeśli chcesz najlepszej pracy na iPhonie, dodaj wemu do ekranu początkowego.</p>
+</section>
+
+<section class="card warning">
+<h3>Kompatybilność</h3>
+<p class="muted">wemu jest eksperymentalnym runtime'em Win32/WASM. Obsługuje klasyczne 32-bitowe aplikacje Windows, ale nie gwarantuje działania każdej gry. Dźwięk nie jest jeszcze zaimplementowany.</p>
+</section>
+</main>
+<footer>PC Game Web • pliki gry są lokalne</footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
