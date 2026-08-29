@@ -1,0 +1,9 @@
+{
+  "name":"PC Game Web",
+  "short_name":"PC Game Web",
+  "start_url":".",
+  "display":"fullscreen",
+  "background_color":"#070a12",
+  "theme_color":"#070a12",
+  "description":"Dotykowy frontend emulatora PC dla iPhone i iPad."
+}

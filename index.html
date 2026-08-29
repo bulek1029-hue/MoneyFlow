@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#070a12">
+<link rel="manifest" href="manifest.webmanifest">
+<title>PC Game Web — iOS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app" id="app">
+<header class="topbar">
+  <div>
+    <div class="eyebrow">PC GAME WEB</div>
+    <h1>PC Game Web</h1>
+    <p>Emulator PC • iPhone / iPad</p>
+  </div>
+  <button id="fullscreenBtn" class="iconBtn" type="button" aria-label="Pełny ekran">⛶</button>
+</header>
+
+<main>
+<section class="card launchCard">
+  <div class="badge">iOS GAMEPAD</div>
+  <h2>Granie dotykowe</h2>
+  <p class="muted">Pad ekranowy jest przygotowany pod grę poziomą. Możesz przesuwać, skalować i przypisywać przyciski.</p>
+  <div class="actions">
+    <button id="launchBtn" class="primary" type="button">▶ Otwórz emulator</button>
+    <button id="newTabBtn" class="secondary" type="button">↗ Nowa karta</button>
+  </div>
+</section>
+
+<section id="player" class="player">
+  <div class="gameArea" id="gameArea">
+    <iframe id="runtime" title="Win32 runtime" src="about:blank" allow="fullscreen; autoplay"></iframe>
+    <div class="screenHint" id="screenHint">
+      <strong>EMULATOR</strong>
+      <span>Naciśnij „Otwórz emulator”.</span>
+    </div>
+
+    <div class="gamepad" id="gamepad" aria-label="Pad ekranowy">
+      <div class="stickWrap control" data-control="stick">
+        <div class="stickBase"><div class="stickKnob"></div></div>
+      </div>
+
+      <div class="mousePad control" data-control="mouse"><span>TOUCHPAD</span></div>
+
+      <div class="actionButtons control" data-control="buttons">
+        <button class="padBtn b1" data-key="KeyE" type="button">E</button>
+        <button class="padBtn b2" data-key="Space" type="button">A</button>
+        <button class="padBtn b3" data-key="KeyF" type="button">F</button>
+        <button class="padBtn b4" data-key="Escape" type="button">ESC</button>
+      </div>
+
+      <div class="shoulders control" data-control="shoulders">
+        <button class="shoulder left" data-key="Tab" type="button">L</button>
+        <button class="shoulder right" data-key="Enter" type="button">R</button>
+      </div>
+
+      <div class="quickKeys control" data-control="quick">
+        <button data-key="Space" type="button">⏎</button>
+        <button data-key="Escape" type="button">ESC</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="card editorCard">
+  <div class="sectionHead">
+    <div>
+      <h3>Konfiguracja pada</h3>
+      <p class="muted">Włącz edycję, a następnie przeciągaj elementy palcem. Rozmiar zmienisz suwakiem.</p>
+    </div>
+    <label class="switchRow"><input id="editToggle" type="checkbox"><span>Edytuj</span></label>
+  </div>
+
+  <div class="editorTools">
+    <label>Rozmiar <input id="sizeRange" type="range" min="70" max="150" value="100"></label>
+    <button id="resetLayout" class="secondary smallBtn" type="button">↺ Resetuj układ</button>
+  </div>
+
+  <div class="mapping">
+    <h4>Przypisanie przycisków</h4>
+    <div class="mappingGrid">
+      <label>E <select data-map="KeyE"><option value="KeyE">E</option><option value="KeyQ">Q</option><option value="KeyR">R</option><option value="KeyF">F</option><option value="Space">Spacja</option></select></label>
+      <label>A <select data-map="Space"><option value="Space">Spacja</option><option value="Enter">Enter</option><option value="KeyE">E</option><option value="KeyF">F</option></select></label>
+      <label>F <select data-map="KeyF"><option value="KeyF">F</option><option value="KeyE">E</option><option value="KeyR">R</option><option value="Space">Spacja</option></select></label>
+      <label>ESC <select data-map="Escape"><option value="Escape">ESC</option><option value="Tab">Tab</option><option value="Enter">Enter</option></select></label>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h3>Tryb ekranu</h3>
+  <div class="screenModes">
+    <button class="screenMode active" data-ratio="16/9" type="button">16:9</button>
+    <button class="screenMode" data-ratio="18/9" type="button">iPhone szeroki</button>
+    <button class="screenMode" data-ratio="4/3" type="button">4:3 klasyczny</button>
+  </div>
+  <p class="muted small">Najlepiej grać w poziomie. Układ pada zapisuje się w pamięci przeglądarki.</p>
+</section>
+</main>
+<footer>PC Game Web • GitHub Pages</footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
